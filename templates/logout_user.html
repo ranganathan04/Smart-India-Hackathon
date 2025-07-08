@@ -1,0 +1,5 @@
+@app.route('/logout_user')
+def logout_user():
+    session.pop('user_logged_in', None)
+    session.pop('user', None)
+    return redirect('/login_user')

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <p><a href="/logout" style="color: red;">Logout</a></p>
+    <h2>🛠️ Admin Panel - All Submitted Posts</h2>
+
+    <form method="get" action="/admin" style="text-align: center;">
+        <input type="text" name="search" placeholder="Search posts or users">
+        <button type="submit">Search</button>
+    </form><br><br>
+
+    <form method="get" action="/export" style="text-align: center;">
+        <button type="submit">⬇ Export to CSV</button>
+    </form>
+
+    <!-- Table Section -->
+    <h3>📝 Submitted Posts</h3>
+    <table border="1" style="margin: auto; background:white;">
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Post</th>
+            <th>Result</th>
+            <th>Feedback</th>
+        </tr>
+        {% for post in posts %}
+        <tr>
+            <td>{{ post[0] }}</td>
+            <td>{{ post[1] }}</td>
+            <td>{{ post[2] }}</td>
+            <td>{{ post[3] }}</td>
+            <td>{{ post[4] }}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- 📊 Spam vs Not Spam Chart -->
+<h3>Spam Distribution</h3>
+<div style="max-width: 300px; margin: auto;">
+    <canvas id="spamChart"></canvas>
+</div>
+
+<!-- 📊 User Feedback Chart -->
+<h3>User Feedback</h3>
+<div style="max-width: 300px; margin: auto;">
+    <canvas id="feedbackChart"></canvas>
+</div>
+<br><a href="/">⬅ Back to Home</a>
+
+<script>
+    window.onload = function () {
+        // --- Spam Chart ---
+        const spamChart = new Chart(document.getElementById('spamChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Spam', 'Not Spam'],
+                datasets: [{
+                    data: [{{ spam_count | safe }}, {{ not_spam_count | safe }}],
+                    backgroundColor: ['#ff4d4d', '#4CAF50'],
+                    borderColor: ['#b30000', '#006600'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Spam vs Not Spam' }
+                }
+            }
+        });
+
+        // --- Feedback Chart ---
+        const feedbackChart = new Chart(document.getElementById('feedbackChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: ['Correct (Yes)', 'Incorrect (No)'],
+                datasets: [{
+                    data: [{{ feedback_yes | safe }}, {{ feedback_no | safe }}],
+                    backgroundColor: ['#4CAF50', '#ff4d4d'],
+                    borderColor: ['#006600', '#b30000'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'User Feedback Accuracy' }
+                }
+            }
+        });
+    };
+</script>
+
+    
+</body>
+
+</html>

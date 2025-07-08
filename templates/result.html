@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Spam Detection Result:</h2>
+    <p>This post is classified as: <strong>{{ result }}</strong></p>
+    <p>Confidence Level: <strong>{{ confidence }}%</strong></p>
+
+    <h3>Was this prediction correct?</h3>
+<form method="post" action="/feedback">
+    <input type="hidden" name="username" value="{{ username }}">
+    <input type="hidden" name="post" value="{{ post }}">
+    <input type="hidden" name="result" value="{{ result }}">
+    <input type="radio" name="feedback" value="Yes" required> Yes
+    <input type="radio" name="feedback" value="No"> No
+    <br><br>
+    <input type="submit" value="Submit Feedback">
+</form>
+
+    <a href="/">⬅ Try Another Post</a>
+</body>
+</html>
