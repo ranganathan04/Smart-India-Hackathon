@@ -1,9 +1,9 @@
 services:
   - type: web
     name: spam-detector
-    runtime: python
-    buildCommand: ""
-    startCommand: "python app.py"
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10
+    env: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
