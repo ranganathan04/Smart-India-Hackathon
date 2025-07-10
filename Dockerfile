@@ -1,30 +1,19 @@
-# Use official Python image
 FROM python:3.10-slim
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    libglib2.0-0 \
-    libsm6 \
-    libxrender1 \
-    libxext6 \
-    && rm -rf /var/lib/apt/lists/*
+# Install Tesseract OCR system-wide
+RUN apt-get update && apt-get install -y tesseract-ocr
 
-# Copy requirements and install Python packages
+# Copy and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
+# Copy project files
 COPY . .
 
-# Make uploads directory
+# Create uploads directory
 RUN mkdir -p uploads
 
-# Expose the port
-EXPOSE 5000
-
-# Run the app using gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+# Start app using gunicorn
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
