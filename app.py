@@ -9,7 +9,7 @@ import os
 
 
 
-pytesseract.pytesseract.tesseract_cmd = r'E:\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'E:\Tesseract-OCR\tesseract.exe'
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey123'  # Needed for session management
